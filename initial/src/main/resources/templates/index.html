@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>博客首页</title>
+</head>
+<body>
+<h1>博客首页</h1>
+<form action="/search" method="get">
+    <input type="text" name="title" placeholder="搜索博客标题" required>
+    <button type="submit">搜索</button>
+</form>
+
+<h2>所有博客</h2>
+<ul>
+    <th:block th:each="blog : ${blogs}">
+        <li>
+            <a th:href="@{/blog/{id}(id=${blog.blogId})}" th:text="${blog.title}"></a>
+            <p th:text="${blog.content}"></p>
+        </li>
+    </th:block>
+</ul>
+</body>
+</html>
