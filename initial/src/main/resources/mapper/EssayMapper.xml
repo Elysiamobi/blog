@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cuit.zjq.mapper.EssayMapper">
+
+    <resultMap id="BaseResultMap" type="com.cuit.zjq.model.domain.Essay">
+        <id property="id" column="id" jdbcType="VARCHAR"/>
+        <result property="userId" column="user_id" jdbcType="VARCHAR"/>
+        <result property="title" column="title" jdbcType="VARCHAR"/>
+        <result property="content" column="content" jdbcType="VARCHAR"/>
+        <result property="tags" column="tags" jdbcType="VARCHAR"/>
+        <result property="favourNum" column="favour_num" jdbcType="INTEGER"/>
+        <result property="thumbNum" column="thumb_num" jdbcType="INTEGER"/>
+        <result property="commentNum" column="comment_num" jdbcType="INTEGER"/>
+        <result property="forwardNum" column="forward_num" jdbcType="INTEGER"/>
+        <result property="top" column="top" jdbcType="TINYINT"/>
+        <result property="createTime" column="create_time" jdbcType="VARCHAR"/>
+        <result property="isDelete" column="is_delete" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id
+        ,user_id,title,
+        content,tags,favour_num,
+        thumb_num,comment_num,forward_num,
+        top,create_time,is_delete
+    </sql>
+    <insert id="insert" parameterType="object">
+        insert into essay (id, user_id, title, content, tags, favour_num, thumb_num, comment_num, forward_num, top,create_time, is_delete)
+        values (#{id}, #{userId}, #{title}, #{content}, #{tags}, #{favourNum}, #{thumbNum}, #{commentNum},
+                #{forwardNum}, #{top}, #{createTime}, #{isDelete})
+    </insert>
+
+    <select id="selectByPage" resultType="com.cuit.zjq.model.domain.Essay">
+        select *
+        from essay
+        where is_delete = 0
+            limit #{currentPage}
+            , #{pageSize};
+    </select>
+
+    <select id="select" resultType="com.cuit.zjq.model.domain.Essay">
+        select *
+        from essay
+        where is_delete = 0
+    </select>
+
+    <select id="selectById" resultType="com.cuit.zjq.model.domain.Essay">
+        select *
+        from essay
+        where is_delete = 0
+          and id = #{id}
+    </select>
+
+    <select id="selectTagsCount" resultType="com.cuit.zjq.model.domain.Essay">
+        select distinct tags
+        from essay
+        where is_delete = 0
+    </select>
+
+    <update id="updateById">
+        update essay
+        set user_id   = #{userId},
+            title     = #{title},
+            content   = #{content},
+            tags   = #{tags},
+            favour_num   = #{favourNum},
+            thumb_num   = #{thumbNum},
+            comment_num   = #{commentNum},
+            favour_num   = #{favourNum},
+            forward_num   = #{forwardNum},
+            top   = #{top},
+            is_delete = #{isDelete}
+        where id = #{id}
+    </update>
+
+    <delete id="deleteById" parameterType="object">
+        update essay
+        set is_delete = 1
+        where id = #{id}
+    </delete>
+</mapper>

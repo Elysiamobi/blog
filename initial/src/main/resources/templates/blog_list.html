@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>博客列表页</title>
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/blog_list.css}">
+</head>
+<body>
+<!--登录会话状态-->
+<div type="hidden" id="sessionUser" th:text="${session.USER_LOGIN_STATE?.id}"></div>
+
+<!-- 导航栏 -->
+<div class="nav">
+    <img th:src="@{/image/avatar.jpg}">
+    <span class="title">博客</span>
+
+    <!--    这个标签仅仅用于占位 ,把下面几个a 标签挤到右边-->
+    <div class="spacer"></div>
+
+    <button id="list" type="button">主页</button>
+    <button id="issue" type="button" th:if="${session.USER_LOGIN_STATE?.id != null}">写博客</button>
+    <button id="login" type="button" th:if="${session.USER_LOGIN_STATE?.id == null } ">登录</button>
+    <button id="logout" type="button" th:if="${session.USER_LOGIN_STATE?.id != null} ">注销</button>
+</div>
+
+<!-- 页面主体部分 -->
+<div class="container">
+    <!--    左侧信息-->
+
+    <div class="container-left">
+
+        <!--使用 这个 .card 表示用户信息-->
+        <div class="card">
+            <img th:src="@{/image/avatar.jpg}" alt="图片显示失败">
+            <!--            用户名-->
+            <h3>杨程</h3>
+            <a th:href="@{https://elysiamobi.github.io}" target="_blank">Github地址</a>
+            <div class='counter'>
+                <span>文章</span>
+                <span>标签</span>
+            </div>
+            <div class="counter">
+                <span th:utext="${essayCount}"></span>
+                <span th:utext="${tagsCount}"></span>
+            </div>
+        </div>
+    </div>
+
+    <!--    右侧信息-->
+    <div class="container-right">
+        <!--
+            表示一篇博客
+        -->
+        <div class="blog" th:each="essay,state : ${essayList}">
+            <!--
+                   博客标题
+            -->
+            <div class="title" th:utext="${essay.title}"></div>
+            <!--
+                发布时间
+            -->
+            <div class="data" th:utext="${essay.createTime}"></div>
+            <!--
+                博客的摘要
+            -->
+            <div class="desc" th:utext="${essay.content.substring(0,essay.getContent().length()-1)}"></div>
+
+
+            <!--
+                查看全文按钮
+            -->
+            <a th:href="@{'/detail/'+${essay.id}}">查看全文 &gt;&gt;</a>
+
+        </div>
+ <div id="page">
+     <a th:href="@{/list/page?currentPage=0}" class="btn btn-info">首页</a>
+     <a th:href="@{/list/page(currentPage=${pre})}" class="btn btn-info">上页</a>
+     <a th:href="@{/list/page(currentPage=${next})}" class="btn btn-info">下页</a>
+     <a th:href="@{/list/page(currentPage=${end})}" class="btn btn-info">末页</a>
+ </div>
+    </div>
+</div>
+</body>
+<script>
+
+    let host = "http://127.0.0.1:8080";
+
+    $("#login").click(function () {
+        window.location.href = host + "/";
+    })
+
+    $("#list").click(function () {
+        window.location.href = host + "/list";
+    })
+
+    $("#issue").click(function () {
+        let userId = document.getElementById("sessionUser").innerText
+        if (userId == "") {
+            alert("请先登录")
+            window.location.href = host + "/";
+            return
+        }
+        window.location.href = host + "/issue";
+    })
+
+    $("#logout").click(function () {
+        $.ajax({
+            url: host + "/user/logout", method: "post", success: function (res) {//res为返回结果
+                if (res.code == 1) {
+                    alert("注销成功")
+                    window.location.href = host + "/";
+                } else {
+                    alert("注销失败")
+                }
+            }, error: function () {//运行错误会执行此方法
+                alert("点赞失败")
+                window.location.href = host + "/403";
+            }
+        })
+    })
+</script>
+</html>

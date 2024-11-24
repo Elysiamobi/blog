@@ -1,0 +1,164 @@
+/*
+       这个文件是给博客列表页实现样式的
+*/
+
+
+/*
+    设置整个博客的容器元素样式
+*/
+
+.blog {
+    width: 100%;
+    /*
+        设置边距 : 此时 上下左右都有 20px
+    */
+    padding: 20px;
+}
+
+/*
+    设置标题 :
+*/
+.blog .title {
+
+    /*
+        设置文字居中
+    */
+    text-align: center;
+
+    /*
+        设置字体大小
+    */
+    font-size: 24px;
+
+    /*
+        设置粗细
+    */
+    font-weight: 700;
+
+    /*
+        设置内边距
+    */
+    padding: 10px
+}
+
+
+/*
+    设置日期 :
+*/
+
+.blog .data {
+
+    /*
+        文本居中
+    */
+    text-align: center;
+
+    /*
+        设置颜色
+    */
+    color: rgb(15, 189, 114);
+
+    /*
+        设置内边距
+    */
+    padding: 10px
+}
+
+/*
+    设置摘要
+*/
+
+.blog .desc {
+
+    /*
+        设置缩进 2 个汉字
+    */
+
+    text-indent: 2em;
+}
+
+/*
+    设置 查看全文
+*/
+.blog a {
+    /*
+        a 标签不方便设置样式 , 转为块级元素
+    */
+
+    display: block;
+
+    width: 120px;
+
+    height: 40px;
+
+    /*
+       设置上边距
+    */
+    margin-top: 20px;
+
+    /*
+       设置水平居中 : 通过
+       margin-left 和 margin-right 来设置
+   */
+    margin-left: auto;
+
+    margin-right: auto;
+
+    /*
+        设置边框
+    */
+    border: 2px solid black;
+
+    /*
+        让文字水平居中
+    */
+    text-align: center;
+
+    /*
+        让文字垂直居中
+    */
+    line-height: 40px;
+
+    /*
+        去掉下划线
+    */
+    text-decoration: none;
+
+    /*
+        文字颜色
+    */
+    color: black;
+
+    /*
+        背景颜色
+    */
+    background-color: orange;
+
+    transition: all 0.8s;
+
+    border-radius: 10px;
+}
+
+/*
+    鼠标滑倒按钮上有一些变化
+*/
+.blog a:hover {
+    color: white;
+    background: skyblue;
+}
+
+#page a {
+
+    color: #3B515E;
+
+    text-decoration: none;
+
+    padding: 10px;
+}
+
+#page {
+    /*
+    水平居中
+*/
+    text-align: center;
+}

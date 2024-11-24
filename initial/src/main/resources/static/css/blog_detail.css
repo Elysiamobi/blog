@@ -1,0 +1,165 @@
+/*
+    这个样式文件给博客详情页使用
+*/
+
+/*
+    设置标题样式
+*/
+
+.container-right .title {
+    /*
+        文字居中
+    */
+    text-align: center;
+
+    /*
+        边距 : 距离产生美
+    */
+    padding: 30px
+
+}
+
+
+/*
+    设置日期样式
+*/
+
+.container-right .date {
+    /*
+        文字颜色
+    */
+    color: black;
+
+    /*
+        位子居中
+    */
+    text-align: center;
+
+    /*
+        设置内边距 (下) 为 20px
+    */
+    padding-bottom: 20px;
+}
+
+/*
+    设置 段落
+*/
+
+.container-right .content p {
+    /*
+        缩进 两字符
+    */
+    text-indent: 2em;
+
+    /*
+        内边距
+    */
+    padding: 10px 30px;
+}
+
+.comment-container {
+    text-align: center;
+}
+
+textarea {
+    border: none;
+    outline: none;
+    padding: 0;
+    margin: 0;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: none;
+    background-color: transparent;
+    font-size: inherit;
+    width: 100%;
+}
+
+textarea:focus {
+    outline: none;
+}
+
+.content {
+    text-align: center;
+}
+
+/* 自定义样式 */
+.mo-textarea {
+    width: 60%;
+    margin-top: 20px;
+    height: 80px;
+    display: inline-block;
+    resize: vertical;
+    padding: 5px 15px;
+    line-height: 1.5;
+    box-sizing: border-box;
+    color: #606266;
+    background-color: #fff;
+    border: 1px solid #dcdfe6;
+    border-radius: 4px;
+    transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+/* 提示文字 */
+.mo-textarea::placeholder {
+    color: #c0c4cc;
+}
+
+/* 鼠标hover */
+.mo-textarea:hover {
+    border-color: #c0c4cc;
+}
+
+/* 获得焦点 */
+.mo-textarea:focus {
+    border-color: #3677f0;
+}
+
+.container button {
+    width: 80px; /*设置按钮宽度*/
+    height: 30px; /*设置按钮高度*/
+    color: white; /*字体颜色*/
+    background-color: cornflowerblue; /*按钮背景颜色*/
+    border-radius: 3px; /*让按钮变得圆滑一点*/
+    border-width: 0; /*消去按钮丑的边框*/
+    margin: 0;
+    outline: none; /*取消轮廓*/
+    font-size: 12px; /*设置字体大小*/
+    text-align: center; /*字体居中*/
+    cursor: pointer; /*设置鼠标箭头手势*/
+}
+
+.container button:hover { /*鼠标移动时的颜色变化*/
+    background-color: antiquewhite;
+}
+
+#commend {
+    flex: 1;
+    width: 80%;
+}
+
+.commentItem {
+    text-indent: 50px;
+    margin-top: 20px;
+    padding-bottom: 20px;
+}
+
+#commend a {
+    /*
+        水平居中
+    */
+    text-align: right;
+
+    color: red;
+
+    text-decoration: none;
+
+    /*
+        为了配合上述样式 ， 将
+        a 标签设置为块级样式
+    */
+    display: block;
+
+    padding: 10px;
+
+}

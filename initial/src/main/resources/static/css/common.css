@@ -1,0 +1,284 @@
+/* 写样式的起手式 ， 先取出浏览器的公共样式 ，并且设置 border-box ， 避免元素盒子被内边距和边距撑大 */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* 并集选择器 */
+html, body {
+
+    /*
+        html 是页面的最顶成元素 ，高度 100% 是相对父元素来说高度是 100% (和父元素一样高)
+        对于 html 标签来说 , 父元素就是浏览器窗口 , 浏览器多高 , html 就多高
+
+        body 的父亲是 html ，设为 100% 意思是 body 和 html 一样高
+        此时 body 和 html 的高度都是和浏览器窗口一样高的
+
+        如果不设置高度 ，此时 元素的默认高度取决于内部的内容
+    */
+
+    height: 100%;
+}
+
+body {
+    background-image: url("../image/background.jpeg");
+
+    /* 拒绝平铺 */
+    background-repeat: no-repeat;
+
+    /* 尽可能扩展 */
+    background-size: cover;
+
+    /* 水平垂直居中 */
+    background-position: center center;
+}
+
+/* 实现导航栏样式 */
+
+.nav {
+
+    /*
+        设置 宽度和父元素一样宽
+        块级元素来说 ， 默认就是 width : 100%
+    */
+    width: 100%;
+
+    /*
+        这里的高度可以自己调整
+    */
+    height: 50px;
+
+    background-color: rgba(51, 51, 51, 0.4);
+
+
+    color: white;
+
+    /*
+        导航栏里面的元素都是水平排列， 弹性布局来设置
+    */
+    display: flex;
+
+    /*
+      垂直方向子元素居中 :
+    */
+
+    align-items: center;
+}
+
+
+.nav img {
+    width: 40px;
+    height: 40px;
+
+    /*    左侧外边距 */
+    margin-left: 30px;
+    margin-right: 10px;
+
+    /* 设置圆角矩形 : 把内切圆设置为宽度的一般,就正好是一个圆形 */
+    border-radius: 50%;
+
+}
+
+.nav button {
+    background-color: transparent;
+    border-style: none;
+    color: white;
+    margin: 0 10px;
+}
+
+
+.nav .spacer {
+
+    width: 70%
+
+}
+
+
+/*
+    编写页面主体样式
+*/
+
+.container {
+    /*    设置主体部分宽度 1000px*/
+    width: 1000px;
+
+    /*
+      高度能够填冲满整个页面 (这里需要减去导航栏的高度)
+     */
+
+    height: calc(100% - 50px);
+
+    /* 水平居中 */
+    margin: 0 auto;
+
+
+    /*background-color: red;*/
+
+    /*    弹性布局*/
+    display: flex;
+
+    /* 垂直居中  */
+    align-items: center;
+
+    /* 中间使用空白分开 */
+    justify-content: space-between;
+
+}
+
+
+.container-left {
+    /*
+       尺寸写百分数, 是相对父元素为基准
+       container-left 的父元素 是 container
+       container 高度已经是 设置好了 ,所以这里的 100%
+       也是设置好了的
+    */
+    height: 100%;
+
+    width: 200px;
+
+    /*    方便观察 加上一个背景色*/
+    /*    background-color: black;*/
+}
+
+.container-right {
+    /*
+        与上面同理
+    */
+    height: 100%;
+
+    /*
+        container 设置的总宽度是 1000px
+
+        container-left 设置的宽度是 200px
+
+        这里原本是设置 800px ,但是 需要 一点空隙
+
+        所以设置为 795px
+    */
+
+    width: 795px;
+
+    /*background-color: green;*/
+
+    /*
+        添加背景颜色
+    */
+
+    background-color: rgba(255, 255, 255, 0.8);
+
+    /*
+        圆角矩形
+    */
+
+    border-radius: 10px;
+
+
+    /*
+        让这个元素自己能带上滚动条
+        这个属性表示 ，内容没有溢出 ，无滚动条，如果内容一处了，则自动加上滚动条
+    */
+    overflow: auto;
+
+}
+
+/*
+    左侧用户信息
+*/
+
+.card {
+    /*
+        背景颜色  带透明
+    */
+    background-color: rgba(255, 255, 255, 0.8);
+
+    /*
+        圆角矩形
+    */
+    border-radius: 10px;
+
+    padding: 30px;
+
+
+}
+
+/*
+    用户头像
+*/
+.card img {
+
+    width: 140px;
+    height: 140px;
+
+    /*
+        内间距  , 让 内容与边框之间有一点距离
+    */
+    border-radius: 50%;
+
+}
+
+/*
+    用户名字
+*/
+.card h3 {
+    /*
+        让文字水平居中
+    */
+    text-align: center;
+
+    /*
+        让文字上下都由边距
+        使用内边距或者外边距均可, 但更倾向使用内边距
+        因为 外边距有时候有坑
+    */
+
+    padding: 10px;
+}
+
+
+/*
+    用户的 Gitee 链接
+*/
+
+.card a {
+    /*
+        水平居中
+    */
+    text-align: center;
+
+    color: #777;
+
+    text-decoration: none;
+
+    /*
+        为了配合上述样式 ， 将
+        a 标签设置为块级样式
+    */
+    display: block;
+
+    padding: 10px;
+
+}
+
+.card .counter {
+    /*
+        为了让里面的元素水平排列 ， 使用弹性布局
+    */
+    display: flex;
+
+
+    /*
+        每个元素左右两边都有等间距的空白
+    */
+    justify-content: space-around;
+
+    /*
+       设置内边距
+    */
+
+    padding: 5px;
+
+}
+
