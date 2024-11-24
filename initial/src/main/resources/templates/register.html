@@ -1,19 +1,92 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>用户注册</title>
+    <meta charset="UTF-8">
+    <title>注册页面</title>
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/login.css}">
 </head>
 <body>
-<h1>用户注册</h1>
-<form action="/users/register" method="post">
-  <label for="username">用户名:</label>
-  <input type="text" name="username" id="username" required>
-  <label for="password">密码:</label>
-  <input type="password" name="password" id="password" required>
-  <button type="submit">注册</button>
-</form>
-<a href="/login">登录</a>
+<!--登录会话状态-->
+<div type="hidden" id="sessionUser" th:text="${session.USER_LOGIN_STATE?.id}"></div>
+
+<!-- 导航栏 -->
+<div class="nav">
+    <img th:src="@{/image/avatar.jpg}">
+    <span class="title">博客</span>
+
+    <!--    这个标签仅仅用于占位 ,把下面几个a 标签挤到右边-->
+    <div class="spacer"></div>
+
+    <button id="list" type="button">主页</button>
+</div>
+
+<!--
+    正文部分
+    这个 login-container 是贯穿整个页面的容器
+-->
+<div class="login-container">
+    <!-- 垂直水平居中的登录对话框    -->
+    <div class="login-dialog">
+        <h3>注册</h3>
+        <div class="row">
+            <span>账号</span>
+            <input type="text" id="userAccount" placeholder="输入账号">
+        </div>
+        <div class="row">
+            <span>密码</span>
+            <input type="password" id="userPassword" placeholder="输入密码">
+        </div>
+        <div class="row">
+            <span>确认密码</span>
+            <input type="password" id="userCheckPassword" placeholder="再次输入密码">
+        </div>
+        <div class="row">
+            <button id="insert" type="button">注册</button>
+        </div>
+    </div>
+</div>
 </body>
+<script>
+
+    let host = "http://127.0.0.1:8080";
+
+    $("#list").click(function () {
+        window.location.href = host + "/list";
+    })
+
+    $("#insert").click(function () {
+        let account = document.getElementById("userAccount").value;
+        let password = document.getElementById("userPassword").value;
+        let checkPassword = document.getElementById("userCheckPassword").value;
+        if (password != checkPassword) {
+            alert("两次输入的密码不一致")
+            return
+        }
+        let params = {
+            userAccount: account,
+            userPassword: password
+        }
+        $.ajax({
+            url: host + "/user/register",
+            type: "post",
+            data: JSON.stringify(params),
+            contentType: 'application/json',
+            success: function (res) {
+                // 只有请求成功（状态码为200）才会执行这个函数
+                if (res.code != 1) {
+                    alert("注册失败")
+                } else if (res.code == 1) {
+                    alert("注册成功")
+                    window.location.href = host + "/";
+                }
+            },
+            error: function (xhr) {
+                // 只有请求不正常（状态码不为200）才会执行
+                alert("注册失败")
+            },
+        })
+    })
+</script>
 </html>

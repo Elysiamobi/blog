@@ -1,25 +1,152 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>博客首页</title>
+    <style>
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        .blog-card { border: 1px solid #ccc; padding: 15px; margin: 15px 0; border-radius: 8px; }
+        .blog-card h3 { margin: 0 0 10px; }
+        .blog-card p { margin: 0; color: #555; }
+        .blog-card a { color: #007BFF; text-decoration: none; }
+        .actions { margin-top: 20px; }
+        button { padding: 10px 20px; margin-right: 10px; cursor: pointer; }
+        #loginModal, #registerModal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); border: 1px solid #ccc; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+        .modal-close { float: right; cursor: pointer; }
+    </style>
 </head>
 <body>
-<h1>博客首页</h1>
-<form action="/search" method="get">
-    <input type="text" name="title" placeholder="搜索博客标题" required>
-    <button type="submit">搜索</button>
-</form>
+<div class="container">
+    <h1>博客系统</h1>
+    <div class="actions">
+        <button id="loginButton">登录</button>
+        <button id="registerButton">注册</button>
+    </div>
 
-<h2>所有博客</h2>
-<ul>
-    <th:block th:each="blog : ${blogs}">
-        <li>
-            <a th:href="@{/blog/{id}(id=${blog.blogId})}" th:text="${blog.title}"></a>
-            <p th:text="${blog.content}"></p>
-        </li>
-    </th:block>
-</ul>
+    <!-- 博客列表 -->
+    <div id="blogList">
+        <!-- 动态加载的博客信息将插入到这里 -->
+    </div>
+</div>
+
+<!-- 登录模态框 -->
+<div id="loginModal">
+    <span class="modal-close" onclick="closeModal('loginModal')">X</span>
+    <h2>用户登录</h2>
+    <form id="loginForm">
+        <label for="username">用户名：</label>
+        <input type="text" id="loginUsername" name="username" required><br><br>
+        <label for="password">密码：</label>
+        <input type="password" id="loginPassword" name="password" required><br><br>
+        <button type="submit">登录</button>
+    </form>
+    <p id="loginResult"></p>
+</div>
+
+<!-- 注册模态框 -->
+<div id="registerModal">
+    <span class="modal-close" onclick="closeModal('registerModal')">X</span>
+    <h2>用户注册</h2>
+    <form id="registerForm">
+        <label for="newUsername">用户名：</label>
+        <input type="text" id="newUsername" name="username" required><br><br>
+        <label for="newPassword">密码：</label>
+        <input type="password" id="newPassword" name="password" required><br><br>
+        <button type="submit">注册</button>
+    </form>
+    <p id="registerResult"></p>
+</div>
+
+<script>
+    // 加载博客列表
+    function loadBlogs() {
+        fetch('/blog/all')
+            .then(response => response.json())
+            .then(data => {
+                const blogList = document.getElementById('blogList');
+                blogList.innerHTML = ''; // 清空旧数据
+                data.forEach(blog => {
+                    const blogCard = document.createElement('div');
+                    blogCard.className = 'blog-card';
+                    blogCard.innerHTML = `
+            <h3>${blog.title}</h3>
+            <p>${blog.summary || '暂无摘要'}</p>
+            <p>发布时间：${new Date(blog.publishedAt).toLocaleString()}</p>
+            <a href="/blog/detail/${blog.id}">查看详情</a>
+          `;
+                    blogList.appendChild(blogCard);
+                });
+            })
+            .catch(err => {
+                console.error('加载博客失败', err);
+            });
+    }
+
+    // 显示模态框
+    function showModal(modalId) {
+        document.getElementById(modalId).style.display = 'block';
+    }
+
+    // 隐藏模态框
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = 'none';
+    }
+
+    // 登录功能
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const username = document.getElementById('loginUsername').value;
+        const password = document.getElementById('loginPassword').value;
+
+        fetch('/user/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({ username, password })
+        })
+            .then(response => {
+                if (response.ok) return response.json();
+                else throw new Error('登录失败');
+            })
+            .then(data => {
+                alert(data.message);
+                if (data.message === '登录成功') window.location.reload(); // 登录后刷新页面
+            })
+            .catch(err => {
+                document.getElementById('loginResult').innerText = err.message;
+            });
+    });
+
+    // 注册功能
+    document.getElementById('registerForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const username = document.getElementById('newUsername').value;
+        const password = document.getElementById('newPassword').value;
+
+        fetch('/user/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({ username, password })
+        })
+            .then(response => {
+                if (response.ok) return response.json();
+                else throw new Error('注册失败');
+            })
+            .then(data => {
+                alert(data.message);
+                closeModal('registerModal');
+            })
+            .catch(err => {
+                document.getElementById('registerResult').innerText = err.message;
+            });
+    });
+
+    // 页面加载完成后加载博客列表
+    document.addEventListener('DOMContentLoaded', loadBlogs);
+
+    // 绑定按钮事件
+    document.getElementById('loginButton').addEventListener('click', () => showModal('loginModal'));
+    document.getElementById('registerButton').addEventListener('click', () => showModal('registerModal'));
+</script>
 </body>
 </html>

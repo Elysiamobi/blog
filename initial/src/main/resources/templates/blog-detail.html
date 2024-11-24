@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>博客详情</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<div class="container">
+  <h2 id="blogTitle"></h2>
+  <p id="blogContent"></p>
+
+  <h3>评论</h3>
+  <ul id="commentList"></ul>
+
+  <h3>添加评论</h3>
+  <textarea id="commentContent" placeholder="请输入评论..." required></textarea><br><br>
+  <button id="addCommentBtn">发表评论</button>
+</div>
+
+<script>
+  const blogId = window.location.pathname.split('/')[2];  // 获取当前博客ID
+
+  // 加载博客详情和评论
+  window.onload = function() {
+    fetch('/blog/detail/' + blogId)
+            .then(response => response.json())
+            .then(blog => {
+              document.getElementById('blogTitle').innerText = blog.title;
+              document.getElementById('blogContent').innerText = blog.content;
+            });
+
+    fetch('/comment/all/' + blogId)
+            .then(response => response.json())
+            .then(comments => {
+              const commentList = document.getElementById('commentList');
+              comments.forEach(comment => {
+                let li = document.createElement('li');
+                li.innerText = comment.content;
+                commentList.appendChild(li);
+              });
+            });
+  };
+
+  // 添加评论
+  document.getElementById('addCommentBtn').addEventListener('click', function() {
+    const content = document.getElementById('commentContent').value;
+    fetch('/comment/add?content=' + content + '&blogId=' + blogId + '&userId=' + 1, {  // userId 假设为1
+      method: 'POST'
+    }).then(response => response.json())
+            .then(data => {
+              if (data.message === "评论成功") {
+                window.location.reload();
+              }
+            });
+  });
+</script>
+</body>
+</html>
