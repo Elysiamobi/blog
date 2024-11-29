@@ -35,8 +35,8 @@
                 const postElement = document.createElement('div');
                 postElement.classList.add('post');
                 postElement.innerHTML =
-                    <h3>${create.title}</h3>
-                <a href="create.html?id=${create.id}">Read more</a>
+                    <h3>${post.title}</h3>
+                <a href="post.html?id=${post.id}">Read more</a>
                 ;
                 postsContainer.appendChild(postElement);
             });
