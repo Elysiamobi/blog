@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Post Details</title>
+</head>
+<body>
+<header>
+  <h1>Post Details</h1>
+  <nav>
+    <a th:href="@{/index.html}">Home</a>
+    <a th:href="@{/login.html}">Login</a>
+    <a th:href="@{/register.html}">Register</a>
+  </nav>
+</header>
+
+<div id="post-detail">
+  <h2 id="post-title"></h2>
+  <p id="post-content"></p>
+  <h3>Comments</h3>
+  <div id="comments"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+  const urlParams = new URLSearchParams(window.location.search);
+  const postId = urlParams.get('id');
+
+  // Fetch post details and comments
+  axios.get(`http://localhost:8080/api/posts/${postId}`)
+          .then(function (response) {
+            const post = response.data;
+            document.getElementById('post-title').innerText = post.title;
+            document.getElementById('post-content').innerText = post.content;
+          })
+          .catch(function (error) {
+            console.log('Error fetching post:', error);
+          });
+
+  // Fetch comments
+  axios.get(`http://localhost:8080/api/comments/post/${postId}`)
+          .then(function (response) {
+            const comments = response.data;
+            const commentsContainer = document.getElementById('comments');
+            comments.forEach(comment => {
+              const commentElement = document.createElement('div');
+              commentElement.innerHTML = `<p>${comment.content}</p><small>by ${comment.user.username}</small>`;
+              commentsContainer.appendChild(commentElement);
+            });
+          })
+          .catch(function (error) {
+            console.log('Error fetching comments:', error);
+          });
+</script>
+</body>
+</html>

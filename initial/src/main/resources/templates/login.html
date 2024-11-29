@@ -1,91 +1,67 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>登录页面</title>
-    <script th:src="@{/js/jquery.min.js}"></script>
-    <link rel="stylesheet" th:href="@{/css/common.css}">
-    <link rel="stylesheet" th:href="@{/css/login.css}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - My Blog</title>
+  <link rel="stylesheet" href="/login.css">
 </head>
 <body>
-<!--登录会话状态-->
-<div type="hidden" id="sessionUser" th:text="${session.USER_LOGIN_STATE?.id}"></div>
-
-<!-- 导航栏 -->
-<div class="nav">
-    <img th:src="@{/image/avatar.jpg}">
-    <span class="title">博客</span>
-
-    <!--    这个标签仅仅用于占位 ,把下面几个a 标签挤到右边-->
-    <div class="spacer"></div>
-
-    <button id="list" type="button">主页</button>
-</div>
-
-<!--
-    正文部分
-    这个 login-container 是贯穿整个页面的容器
--->
 <div class="login-container">
-    <!-- 垂直水平居中的登录对话框    -->
-    <div class="login-dialog">
-        <h3>登录</h3>
-        <div class="row">
-            <span>账号</span>
-            <input type="text" id="userAccount" placeholder="输入账号">
-        </div>
-        <div class="row">
-            <span>密码</span>
-            <input type="password" id="userPassword" placeholder="输入密码">
-        </div>
-        <div class="row">
-            <button id="submit" type="button">登录</button>
-        </div>
-        <div class="row">
-            <button id="insert" type="button">注册</button>
-        </div>
+  <h2>Login to My Blog</h2>
+
+  <!-- Login Form -->
+  <form id="login-form">
+    <label for="username">Username</label>
+    <input type="text" id="username" name="username" placeholder="Enter your username" required>
+
+    <label for="password">Password</label>
+    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+
+    <button type="submit">Login</button>
+
+    <!-- Error message -->
+    <div id="error-message" class="error-message">
+      Invalid username or password.
     </div>
+
+    <!-- Success message -->
+    <div id="success-message" class="success-message">
+      Login successful! Redirecting...
+    </div>
+  </form>
+
+  <div class="link-container">
+    <p>Don't have an account? <a href="./register.html">Register here</a></p>
+  </div>
 </div>
-</body>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
+  // Handle login form submission
+  document.getElementById('login-form').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent form submission (Page reload)
 
-    let host = "http://127.0.0.1:8080";
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
 
-    $("#list").click(function () {
-        window.location.href = host + "/list";
-    })
+    // Clear previous messages
+    document.getElementById('error-message').style.display = 'none';
+    document.getElementById('success-message').style.display = 'none';
 
-    $("#submit").click(function () {
-        let account = document.getElementById("userAccount").value;
-        let password = document.getElementById("userPassword").value;
-        let params = {
-            userAccount: account,
-            userPassword: password
-        }
-        $.ajax({
-            url: host + "/user/login",
-            type: "post",
-            data: JSON.stringify(params),
-            contentType: 'application/json',
-            success: function (res) {
-                // 只有请求成功（状态码为200）才会执行这个函数
-                if (res.code != 1) {
-                    alert("登录失败")
-                } else if (res.code == 1) {
-                    alert("登录成功")
-                    //跳转到文章列表
-                    window.location.href = host + "/list";
-                }
-            },
-            error: function (xhr) {
-                // 只有请求不正常（状态码不为200）才会执行
-                console.log('error', xhr);
-            },
-        })
-    })
+    // Send login request to backend
+    axios.post('http://localhost:8080/api/users/login', null, {
+      params: { username, password },
+    }).then(function () {
+      document.getElementById('success-message').style.display = 'block';
+      setTimeout(() => {
+        window.location.href = 'index.html';
+      }, 1500);
+    }).catch(function () {
+      document.getElementById('error-message').style.display = 'block';
+    });
+  });
 
-    $("#insert").click(function () {
-        window.location.href = host + "/register";
-    })
 </script>
+</body>
 </html>

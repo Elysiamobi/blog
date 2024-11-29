@@ -1,17 +1,19 @@
 package com.yangcheng.initial.Repository;
 
+import com.yangcheng.initial.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+@Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
 
-    // 根据用户名查询用户
+    // 根据用户名查找用户
     Optional<User> findByUsername(String username);
 
-    // 检查用户名是否存在
-    boolean existsByUsername(String username);
+    // 根据邮箱查找用户
+    Optional<User> findByEmail(String email);
 
-    // 用户登录时验证用户名和密码
-    Optional<User> findByUsernameAndPassword(String username, String password);
+    // 可以根据需要添加更多自定义查询方法
 }

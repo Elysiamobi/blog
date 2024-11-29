@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Update Post</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<header>
+  <h1>Update Post</h1>
+  <nav>
+    <a href="index.html">Home</a>
+<!--    <a href="login.html">Login</a>-->
+  </nav>
+</header>
+<main>
+  <form id="update-post-form">
+    <h2>Edit Post</h2>
+    <label for="title">Title:</label>
+    <input type="text" id="title" name="title" required>
+    <label for="content">Content:</label>
+    <textarea id="content" name="content" rows="10" required></textarea>
+    <button type="submit">Update</button>
+  </form>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+  // Ensure only ADMIN can access
+  const userRole = localStorage.getItem('role_name');
+  if (userRole !== 'ADMIN') {
+    alert('Access denied. Only ADMIN can update posts.');
+    window.location.href = 'index.html';
+  }
+
+  const postId = new URLSearchParams(window.location.search).get('id');
+  axios.get(`http://localhost:8080/api/posts/${postId}`)
+          .then(response => {
+            const post = response.data;
+            document.getElementById('title').value = post.title;
+            document.getElementById('content').value = post.content;
+          })
+          .catch(error => {
+            console.error('Error loading post:', error);
+          });
+
+  document.getElementById('update-post-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const title = document.getElementById('title').value;
+    const content = document.getElementById('content').value;
+
+    axios.put(`http://localhost:8080/api/posts/${postId}`, { title, content })
+            .then(response => {
+              alert('Post updated successfully!');
+              window.location.href = 'index.html';
+            })
+            .catch(error => {
+              console.error('Error updating post:', error);
+              alert('Failed to update post.');
+            });
+  });
+</script>
+</body>
+</html>

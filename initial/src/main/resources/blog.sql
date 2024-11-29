@@ -1,110 +1,53 @@
--- 创建库
-create
-    database if not exists `yc_blog`;
+-- 创建数据库
+CREATE DATABASE yc_blog;
+USE yc_blog;
 
--- 切换库
-use `yc_blog`;
+-- 1. 用户表: 存储用户信息
+CREATE TABLE users (
+                       user_id INT AUTO_INCREMENT PRIMARY KEY,  -- 用户ID
+                       username VARCHAR(100) NOT NULL,          -- 用户名
+                       password VARCHAR(255) NOT NULL,          -- 密码
+                       email VARCHAR(100),                      -- 邮箱
+                       role_id INT,                             -- 用户角色ID（外键）
+                       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- 创建时间
+                       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,  -- 更新时间
+                       INDEX idx_username(username)
+);
 
-SET NAMES utf8mb4;
-SET FOREIGN_KEY_CHECKS = 0;
+-- 2. 角色表: 存储用户角色信息
+CREATE TABLE roles (
+                       role_id INT AUTO_INCREMENT PRIMARY KEY,  -- 角色ID
+                       role_name VARCHAR(50) NOT NULL           -- 角色名称（比如 "USER", "ADMIN"）
+);
 
--- ----------------------------
--- Table structure for comment
--- ----------------------------
-DROP TABLE IF EXISTS `comment`;
-CREATE TABLE `comment`  (
-                            `id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '评论id',
-                            `essay_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '评论文章id',
-                            `user_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '评论用户id',
-                            `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '评论内容',
-                            `reply_to` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '回复评论id',
-                            `is_delete` tinyint(1) NULL DEFAULT NULL COMMENT '逻辑删除',
-                            PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+-- 插入角色数据
+INSERT INTO roles (role_name) VALUES
+                                  ('USER'),
+                                  ('ADMIN');
 
--- ----------------------------
--- Table structure for essay
--- ----------------------------
-DROP TABLE IF EXISTS `essay`;
-CREATE TABLE `essay`  (
-                          `id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '文章id',
-                          `user_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '用户id',
-                          `title` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '文章标题',
-                          `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '文章内容',
-                          `tags` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '文章标签',
-                          `favour_num` int(0) NULL DEFAULT NULL COMMENT '收藏数',
-                          `thumb_num` int(0) NULL DEFAULT NULL COMMENT '点赞数',
-                          `comment_num` int(0) NULL DEFAULT NULL COMMENT '评论数',
-                          `forward_num` int(0) NULL DEFAULT NULL COMMENT '转发数',
-                          `top` tinyint(0) NULL DEFAULT NULL COMMENT '文章置顶',
-                          `is_delete` tinyint(0) NULL DEFAULT NULL COMMENT '逻辑删除',
-                          PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+-- 3. 文章表: 存储博客文章信息
+CREATE TABLE posts (
+                       post_id INT AUTO_INCREMENT PRIMARY KEY,    -- 文章ID
+                       title VARCHAR(255) NOT NULL,                -- 文章标题
+                       content TEXT NOT NULL,                      -- 文章内容
+                       author_id INT,                              -- 作者ID（外键，指向 users 表）
+                       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- 创建时间
+                       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,  -- 更新时间
+                       INDEX idx_title(title)
+);
 
--- ----------------------------
--- Table structure for favour
--- ----------------------------
-DROP TABLE IF EXISTS `favour`;
-CREATE TABLE `favour`  (
-                           `id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '收藏id',
-                           `essay_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '文章id',
-                           `user_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '用户id',
-                           PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+-- 4. 评论表: 存储文章的评论
+CREATE TABLE comments (
+                          comment_id INT AUTO_INCREMENT PRIMARY KEY,  -- 评论ID
+                          post_id INT,                                -- 文章ID（外键，指向 posts 表）
+                          user_id INT,                                -- 用户ID（外键，指向 users 表）
+                          content TEXT NOT NULL,                      -- 评论内容
+                          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- 创建时间
+                          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,  -- 更新时间
+                          INDEX idx_post_id(post_id),
+                          FOREIGN KEY (post_id) REFERENCES posts(post_id) ON DELETE CASCADE,
+                          FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+);
 
--- ----------------------------
--- Table structure for follow
--- ----------------------------
-DROP TABLE IF EXISTS `follow`;
-CREATE TABLE `follow`  (
-                           `id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '关注id',
-                           `follow_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '关注者id',
-                           `follower_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '被关注者id',
-                           PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for forward
--- ----------------------------
-DROP TABLE IF EXISTS `forward`;
-CREATE TABLE `forward`  (
-                            `id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '转发id',
-                            `essay_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '转发文章id',
-                            `user_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '转发用户id',
-                            PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for thumb
--- ----------------------------
-DROP TABLE IF EXISTS `thumb`;
-CREATE TABLE `thumb`  (
-                          `id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '点赞id',
-                          `essay_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '评论文章id',
-                          `user_id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '评论用户id',
-                          PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for user
--- ----------------------------
-DROP TABLE IF EXISTS `user`;
-CREATE TABLE `user`  (
-                         `id` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '用户id',
-                         `user_account` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '用户账号',
-                         `user_password` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '用户密码',
-                         `user_role` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '用户角色',
-                         `email` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '邮箱',
-                         `phone` char(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '电话号码',
-                         `hobby` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '爱好',
-                         `is_delete` tinyint(1) NULL DEFAULT NULL COMMENT '逻辑删除',
-                         PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
-
-SET FOREIGN_KEY_CHECKS = 1;
-
-ALTER TABLE essay ADD COLUMN create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
-ALTER TABLE comment ADD COLUMN create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
-
-
-
+INSERT INTO users (username, password,role_id)
+VALUES ('yc',123,1);
