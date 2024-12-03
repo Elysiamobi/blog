@@ -35,6 +35,9 @@ public class PostController {
         return ResponseEntity.ok(createdPost);
     }
 
+
+
+
     // 更新文章
     @PutMapping("/{postId}")
     public ResponseEntity<Post> updatePost(@PathVariable Integer postId, @RequestBody Post post) {

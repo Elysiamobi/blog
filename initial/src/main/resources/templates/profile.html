@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile - My Blog</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+<header>
+  <h1>My Blog</h1>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="login.html">Login</a>
+    <a href="register.html">Register</a>
+    <a href="create.html">Publish Article</a>
+  </nav>
+</header>
+
+<main>
+  <h2>My Profile</h2>
+  <form id="profile-form">
+    <label for="username">Username</label>
+    <input type="text" id="username" name="username" disabled>
+
+    <label for="email">Email</label>
+    <input type="email" id="email" name="email" disabled>
+
+    <button type="submit">Update Profile</button>
+  </form>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+  // Fetch user profile data
+  axios.get('http://localhost:8080/api/users/me')
+          .then(response => {
+            document.getElementById('username').value = response.data.username;
+            document.getElementById('email').value = response.data.email;
+          });
+
+  // Handle profile update
+  document.getElementById('profile-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const username = document.getElementById('username').value;
+    const email = document.getElementById('email').value;
+
+    axios.put('http://localhost:8080/api/users/me', {
+      username: username,
+      email: email
+    }, {
+      headers: { 'Content-Type': 'application/json' }
+    })
+            .then(function () {
+              alert('Profile updated successfully!');
+            })
+            .catch(function () {
+              alert('Failed to update profile.');
+            });
+  });
+</script>
+
+</body>
+</html>

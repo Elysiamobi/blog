@@ -11,6 +11,7 @@
   <h2>Login to My Blog</h2>
 
   <!-- Login Form -->
+  <!-- Login Form -->
   <form id="login-form">
     <label for="username">Username</label>
     <input type="text" id="username" name="username" placeholder="Enter your username" required>
@@ -20,16 +21,17 @@
 
     <button type="submit">Login</button>
 
-    <!-- Error message -->
-    <div id="error-message" class="error-message">
+    <div id="loading-message" style="display:none;" class="error-message">Logging in...</div>
+
+    <div id="error-message" class="error-message" style="display:none;">
       Invalid username or password.
     </div>
 
-    <!-- Success message -->
-    <div id="success-message" class="success-message">
+    <div id="success-message" class="success-message" style="display:none;">
       Login successful! Redirecting...
     </div>
   </form>
+
 
   <div class="link-container">
     <p>Don't have an account? <a href="./register.html">Register here</a></p>
@@ -40,7 +42,7 @@
 <script>
   // Handle login form submission
   document.getElementById('login-form').addEventListener('submit', function(event) {
-    event.preventDefault(); // Prevent form submission (Page reload)
+    event.preventDefault();
 
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
@@ -48,19 +50,23 @@
     // Clear previous messages
     document.getElementById('error-message').style.display = 'none';
     document.getElementById('success-message').style.display = 'none';
+    document.getElementById('loading-message').style.display = 'block';
 
     // Send login request to backend
     axios.post('http://localhost:8080/api/users/login', null, {
       params: { username, password },
     }).then(function () {
+      document.getElementById('loading-message').style.display = 'none';
       document.getElementById('success-message').style.display = 'block';
       setTimeout(() => {
         window.location.href = 'index.html';
       }, 1500);
     }).catch(function () {
+      document.getElementById('loading-message').style.display = 'none';
       document.getElementById('error-message').style.display = 'block';
     });
   });
+
 
 </script>
 </body>

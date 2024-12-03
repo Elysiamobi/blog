@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Post Detail - My Blog</title>
+  <title>My Comments - My Blog</title>
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
@@ -19,41 +19,41 @@
 </header>
 
 <main>
-  <h2 id="post-title">Post Title</h2>
-  <div id="post-content">
-    <!-- Post content will be loaded here -->
+  <h2>My Comments</h2>
+  <div id="comments">
+    <!-- User comments will be displayed here -->
   </div>
-
-  <section>
-    <h3>Comments</h3>
-    <div id="comments">
-      <!-- Comments will be displayed here -->
-    </div>
-  </section>
-
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
-  const postId = new URLSearchParams(window.location.search).get('id');
-  axios.get(`http://localhost:8080/api/posts/${postId}`)
-          .then(response => {
-            const post = response.data;
-            document.getElementById('post-title').textContent = post.title;
-            document.getElementById('post-content').innerHTML = post.content;
-          });
-
-  axios.get(`http://localhost:8080/api/posts/${postId}/comments`)
+  // Fetch user's comments
+  axios.get('http://localhost:8080/api/users/me/comments')
           .then(response => {
             const comments = response.data;
             const commentsContainer = document.getElementById('comments');
             comments.forEach(comment => {
               const commentElement = document.createElement('div');
               commentElement.classList.add('comment');
-              commentElement.innerHTML = `<p>${comment.content}</p>`;
+              commentElement.innerHTML = `
+          <p>${comment.content}</p>
+          <button onclick="deleteComment(${comment.id})">Delete</button>
+        `;
               commentsContainer.appendChild(commentElement);
             });
           });
+
+  // Handle comment deletion
+  function deleteComment(commentId) {
+    axios.delete(`http://localhost:8080/api/comments/${commentId}`)
+            .then(function () {
+              alert('Comment deleted successfully!');
+              window.location.reload(); // Reload the page to reflect changes
+            })
+            .catch(function () {
+              alert('Failed to delete comment.');
+            });
+  }
 </script>
 
 </body>

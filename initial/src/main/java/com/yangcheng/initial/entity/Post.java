@@ -31,4 +31,8 @@ public class Post {
 
     @JoinColumn(name = "created_at")
     private LocalDateTime createdAt;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
 }

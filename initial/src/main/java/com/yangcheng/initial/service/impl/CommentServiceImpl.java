@@ -33,4 +33,17 @@ public class CommentServiceImpl implements CommentService {
     public void deleteComment(Integer commentId) {
         commentRepository.deleteById(commentId);
     }
+
+    @Override
+    public Comment updateComment(Integer commentId, String content) {
+        Comment existingComment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new RuntimeException("Comment not found"));
+        existingComment.setContent(content);
+        return commentRepository.save(existingComment);
+    }
+
+    @Override
+    public List<Comment> getAllComments() {
+        return commentRepository.findAll();
+    }
 }

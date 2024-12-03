@@ -1,6 +1,8 @@
 package com.yangcheng.initial.service;
 
 import com.yangcheng.initial.entity.User;
+
+import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
@@ -13,4 +15,7 @@ public interface UserService {
 
     User createUser(User user);
     boolean checkIfUserExists(String username);
+    void deleteUser(Integer userId);
+    User updateUser(Integer userId, User user);
+    List<User> getAllUsers();
 }

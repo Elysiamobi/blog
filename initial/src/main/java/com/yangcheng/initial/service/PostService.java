@@ -7,6 +7,7 @@ public interface PostService {
     List<Post> getAllPosts();
     Post getPostById(Integer postId);
     Post createPost(Post post);
+    Post createPostWithCategory(Post post, Integer categoryId); // 新增
     Post updatePost(Integer postId, Post post);
     void deletePost(Integer postId);
     List<Post> getPostsByAuthor(Integer userId);

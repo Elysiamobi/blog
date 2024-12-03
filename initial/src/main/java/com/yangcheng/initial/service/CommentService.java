@@ -8,4 +8,7 @@ public interface CommentService {
     List<Comment> getCommentsByUser(Integer userId);
     Comment createComment(Comment comment);
     void deleteComment(Integer commentId);
+    Comment updateComment(Integer commentId, String content);  // 新增
+    List<Comment> getAllComments();
 }
+

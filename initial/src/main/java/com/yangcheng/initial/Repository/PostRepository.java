@@ -18,5 +18,5 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
     // 根据创建时间排序查找所有文章
     List<Post> findAllByOrderByCreatedAtDesc();
 
-
+    List<Post> findByCategory_CategoryId(Integer categoryId); // 新增
 }

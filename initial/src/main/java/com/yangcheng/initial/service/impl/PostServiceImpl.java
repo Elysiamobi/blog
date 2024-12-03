@@ -1,7 +1,8 @@
 package com.yangcheng.initial.service.impl;
 
 
-import com.yangcheng.initial.Repository.PostRepository;
+import com.yangcheng.initial.Repository.*;
+import com.yangcheng.initial.entity.Category;
 import com.yangcheng.initial.entity.Post;
 import com.yangcheng.initial.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,9 @@ public class PostServiceImpl implements PostService {
 
     @Autowired
     private PostRepository postRepository;
+
+    @Autowired
+    private CategoryRepository CategoryRepository;
 
     @Override
     public List<Post> getAllPosts() {
@@ -28,6 +32,14 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post createPost(Post post) {
+        return postRepository.save(post);
+    }
+
+    @Override
+    public Post createPostWithCategory(Post post, Integer categoryId) {
+        Category category = CategoryRepository.findById(categoryId)
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+        post.setCategory(category);
         return postRepository.save(post);
     }
 

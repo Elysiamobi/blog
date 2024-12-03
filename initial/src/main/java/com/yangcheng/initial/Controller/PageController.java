@@ -28,9 +28,10 @@ public class PageController {
     @GetMapping("/create.html")
     public String createPage(){
         return "create";
-    }@GetMapping("/update.html")
-
+    }
+    @GetMapping("/update.html")
     public String updatePage(){
         return "update";
     }
+
 }
