@@ -15,18 +15,15 @@ public class RoleController {
     @Autowired
     private RoleService roleService;
 
-    // 根据角色名称获取角色信息
-    @GetMapping("/{roleName}")
-    public ResponseEntity<Role> getRoleByName(@PathVariable String roleName) {
-        Optional<Role> role = roleService.getRoleByName(roleName);
-        return role.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+    @GetMapping("/{id}")
+    public ResponseEntity<Role> getRoleById(@PathVariable Integer id) {
+        Optional<Role> role = roleService.findById(id);
+        return role.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // 给用户分配角色
-    @PostMapping("/assign")
-    public ResponseEntity<Role> assignRoleToUser(@RequestParam String roleName) {
-        Role role = roleService.assignRoleToUser(roleName);
-        return ResponseEntity.ok(role);
+    @GetMapping("/name/{roleName}")
+    public ResponseEntity<Role> getRoleByName(@PathVariable String roleName) {
+        Role role = roleService.findByRoleName(roleName);
+        return role != null ? ResponseEntity.ok(role) : ResponseEntity.notFound().build();
     }
 }

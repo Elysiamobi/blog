@@ -8,7 +8,8 @@ import java.util.List;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Integer> {
-    List<Category> findByNameContaining(String name);  // 支持按名称模糊查询
-//    List<Category> findBycategoryId(Integer categoryId);
+    // Find a category by its name
+    Category findByName(String name);
+
 }
 

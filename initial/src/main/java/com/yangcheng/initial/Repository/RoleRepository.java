@@ -10,6 +10,6 @@ import java.util.Optional;
 public interface RoleRepository extends JpaRepository<Role, Integer> {
 
     // 根据角色名称查找角色
-    Optional<Role> findByRoleName(String roleName);
+    Role findByRoleName(String roleName);
 
 }

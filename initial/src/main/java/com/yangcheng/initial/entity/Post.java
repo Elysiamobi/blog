@@ -9,30 +9,51 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "posts")
 public class Post {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer postId;
 
-    private String title;  // 文章标题
-    private String content;  // 文章内容
+    private String title;
 
-    @ManyToOne
-    @JoinColumn(name = "author_id")
-    private User author;  // 文章的作者
+    @Lob
+    private String content;
 
-    @OneToMany(mappedBy = "post")
-    private List<Comment> comments;  // 文章的评论
+    @Column(name = "author_id")
+    private Integer authorId;
 
-    @JoinColumn(name = "created_at")
+    @Column(name = "category_id")
+    private Integer categoryId;
+
+    @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    private Category category;
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    @Transient
+    private String categoryName; // Category name for display
+
+    @Transient
+    private String authorName; // Author name for display
+
+    // Getter and Setter for categoryName
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
+    // Getter and Setter for authorName
+    public String getAuthorName() {
+        return authorName;
+    }
+
+    public void setAuthorName(String authorName) {
+        this.authorName = authorName;
+    }
 }

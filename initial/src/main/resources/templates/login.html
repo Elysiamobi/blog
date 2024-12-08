@@ -1,18 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - My Blog</title>
+  <title>Login</title>
   <link rel="stylesheet" href="/login.css">
 </head>
 <body>
 <div class="login-container">
-  <h2>Login to My Blog</h2>
-
-  <!-- Login Form -->
-  <!-- Login Form -->
-  <form id="login-form">
+  <h2>Login</h2>
+  <form th:action="@{/login}" method="post">
     <label for="username">Username</label>
     <input type="text" id="username" name="username" placeholder="Enter your username" required>
 
@@ -20,54 +17,15 @@
     <input type="password" id="password" name="password" placeholder="Enter your password" required>
 
     <button type="submit">Login</button>
-
-    <div id="loading-message" style="display:none;" class="error-message">Logging in...</div>
-
-    <div id="error-message" class="error-message" style="display:none;">
-      Invalid username or password.
-    </div>
-
-    <div id="success-message" class="success-message" style="display:none;">
-      Login successful! Redirecting...
-    </div>
   </form>
 
-
   <div class="link-container">
-    <p>Don't have an account? <a href="./register.html">Register here</a></p>
+    <a th:href="@{/register}">Don't have an account? Register here</a>
   </div>
+
+  <!-- Success or Error Messages -->
+  <div class="error-message" th:if="${error}" th:text="${error}"></div>
+  <div class="success-message" th:if="${success}" th:text="${success}"></div>
 </div>
-
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script>
-  // Handle login form submission
-  document.getElementById('login-form').addEventListener('submit', function(event) {
-    event.preventDefault();
-
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
-
-    // Clear previous messages
-    document.getElementById('error-message').style.display = 'none';
-    document.getElementById('success-message').style.display = 'none';
-    document.getElementById('loading-message').style.display = 'block';
-
-    // Send login request to backend
-    axios.post('http://localhost:8080/api/users/login', null, {
-      params: { username, password },
-    }).then(function () {
-      document.getElementById('loading-message').style.display = 'none';
-      document.getElementById('success-message').style.display = 'block';
-      setTimeout(() => {
-        window.location.href = 'index.html';
-      }, 1500);
-    }).catch(function () {
-      document.getElementById('loading-message').style.display = 'none';
-      document.getElementById('error-message').style.display = 'block';
-    });
-  });
-
-
-</script>
 </body>
 </html>

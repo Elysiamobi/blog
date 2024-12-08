@@ -6,24 +6,28 @@ import lombok.NoArgsConstructor;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "comments")
 public class Comment {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer commentId;
 
-    @ManyToOne
-    @JoinColumn(name = "post_id")
-    private Post post;  // 评论所属的文章
+    @Column(name = "post_id")
+    private Integer postId;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;  // 评论的用户
+    @Column(name = "user_id")
+    private Integer userId;
 
-    private String content;  // 评论内容
+    @Lob
+    private String content;
+
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 }

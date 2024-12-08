@@ -1,72 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>User Registration</title>
+  <title>Register</title>
   <link rel="stylesheet" href="/login.css">
 </head>
 <body>
 <div class="login-container">
-  <h2>User Registration</h2>
-
-  <nav class="link-container">
-    <a href="index.html">Home</a> |
-    <a href="login.html">Login</a>
-  </nav>
-
-  <!-- Registration Form -->
-  <form id="register-form">
+  <h2>Register</h2>
+  <form th:action="@{/register}" method="post">
     <label for="username">Username</label>
     <input type="text" id="username" name="username" placeholder="Choose a username" required>
+
+    <label for="email">Email</label>
+    <input type="email" id="email" name="email" placeholder="Enter your email" required>
 
     <label for="password">Password</label>
     <input type="password" id="password" name="password" placeholder="Create a password" required>
 
+    <label for="confirm-password">Confirm Password</label>
+    <input type="password" id="confirm-password" name="confirmPassword" placeholder="Confirm your password" required>
+
     <button type="submit">Register</button>
-
-    <!-- Error message -->
-    <div id="error-message" class="error-message" style="display:none;">
-      Registration failed. Please try again.
-    </div>
-
-    <!-- Success message -->
-    <div id="success-message" class="success-message" style="display:none;">
-      Registration successful! Redirecting to login...
-    </div>
   </form>
+
+  <div class="link-container">
+    <a th:href="@{/login}">Already have an account? Login here</a>
+  </div>
+
+  <!-- Success or Error Messages -->
+  <div class="error-message" th:if="${error}" th:text="${error}"></div>
+  <div class="success-message" th:if="${success}" th:text="${success}"></div>
 </div>
-
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script>
-  // Handle registration form submission
-  document.getElementById('register-form').addEventListener('submit', function(event) {
-    event.preventDefault();
-
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
-
-    // Clear previous messages
-    document.getElementById('error-message').style.display = 'none';
-    document.getElementById('success-message').style.display = 'none';
-
-    // Send registration request to backend
-    axios.post('http://localhost:8080/api/users/register', {
-      username: username,
-      password: password
-    }, {
-      headers: { 'Content-Type': 'application/json' }
-    })
-            .then(function () {
-              document.getElementById('success-message').style.display = 'block';
-              setTimeout(() => {
-                window.location.href = 'login.html';  // Redirect to login page
-              }, 1500);
-            })
-            .catch(function () {
-              document.getElementById('error-message').style.display = 'block';
-            });
-  });
-</script>
 </body>
 </html>

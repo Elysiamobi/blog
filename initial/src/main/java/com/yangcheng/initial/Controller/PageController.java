@@ -34,4 +34,13 @@ public class PageController {
         return "update";
     }
 
+    @GetMapping("/profile.html")
+    public String profilePage(){
+        return "profile";
+    }
+
+    @GetMapping("/comments.html")
+    public String adminPage(){
+        return "comments";
+    }
 }

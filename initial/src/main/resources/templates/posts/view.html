@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Post Details</title>
+</head>
+<body>
+<div class="container">
+  <h1 th:text="${post.title}">Post Title</h1>
+  <p><strong>Category ID:</strong> <span th:text="${post.categoryId}"></span></p>
+  <p><strong>Author ID:</strong> <span th:text="${post.authorId}"></span></p>
+  <p><strong>Published At:</strong> <span th:text="${post.createdAt}"></span></p>
+  <div>
+    <p th:text="${post.content}">Post Content</p>
+  </div>
+  <hr>
+  <h2>Comments</h2>
+  <div th:if="${comments.isEmpty()}">
+    <p>No comments yet. Be the first to comment!</p>
+  </div>
+  <div th:each="comment : ${comments}">
+    <div>
+      <p><strong>User ID:</strong> <span th:text="${comment.userId}"></span></p>
+      <p th:text="${comment.content}">Comment Content</p>
+      <p><strong>Posted At:</strong> <span th:text="${comment.createdAt}"></span></p>
+    </div>
+    <hr>
+  </div>
+  <form th:action="@{/comments/save}" method="post">
+    <input type="hidden" name="postId" th:value="${post.postId}">
+    <label for="userId">User ID:</label>
+    <input type="number" id="userId" name="userId" required>
+    <br>
+    <label for="content">Add a Comment:</label>
+    <textarea id="content" name="content" required></textarea>
+    <br>
+    <button type="submit">Post Comment</button>
+  </form>
+  <a th:href="@{/posts}">Back to Posts</a>
+</div>
+</body>
+</html>

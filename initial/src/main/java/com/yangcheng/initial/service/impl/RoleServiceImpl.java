@@ -15,18 +15,12 @@ public class RoleServiceImpl implements RoleService {
     private RoleRepository roleRepository;
 
     @Override
-    public Optional<Role> getRoleByName(String roleName) {
+    public Role findByRoleName(String roleName) {
         return roleRepository.findByRoleName(roleName);
     }
 
     @Override
-    public Role assignRoleToUser(String roleName) {
-        // 如果角色不存在则创建
-        Optional<Role> role = getRoleByName(roleName);
-        if (role.isEmpty()) {
-            // 如果角色不存在，可以选择创建角色，或者抛出异常
-            throw new RuntimeException("Role not found: " + roleName);
-        }
-        return role.get();
+    public Optional<Role> findById(Integer roleId) {
+        return roleRepository.findById(roleId);
     }
 }

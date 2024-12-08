@@ -4,6 +4,6 @@ import com.yangcheng.initial.entity.Role;
 import java.util.Optional;
 
 public interface RoleService {
-    Optional<Role> getRoleByName(String roleName);
-    Role assignRoleToUser(String roleName);
+    Role findByRoleName(String roleName);
+    Optional<Role> findById(Integer roleId);
 }

@@ -2,13 +2,13 @@ package com.yangcheng.initial.service.impl;
 
 
 import com.yangcheng.initial.Repository.*;
-import com.yangcheng.initial.entity.Category;
 import com.yangcheng.initial.entity.Post;
 import com.yangcheng.initial.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -16,40 +16,29 @@ public class PostServiceImpl implements PostService {
     @Autowired
     private PostRepository postRepository;
 
-    @Autowired
-    private CategoryRepository CategoryRepository;
-
     @Override
-    public List<Post> getAllPosts() {
-        return postRepository.findAllByOrderByCreatedAtDesc();
+    public List<Post> findByAuthorId(Integer authorId) {
+        return postRepository.findByAuthorId(authorId);
     }
 
     @Override
-    public Post getPostById(Integer postId) {
-        return postRepository.findById(postId)
-                .orElseThrow(() -> new RuntimeException("Post not found"));
+    public List<Post> findByCategoryId(Integer categoryId) {
+        return postRepository.findByCategoryId(categoryId);
     }
 
     @Override
-    public Post createPost(Post post) {
-        return postRepository.save(post);
+    public List<Post> searchByTitle(String keyword) {
+        return postRepository.findByTitleContaining(keyword);
     }
 
     @Override
-    public Post createPostWithCategory(Post post, Integer categoryId) {
-        Category category = CategoryRepository.findById(categoryId)
-                .orElseThrow(() -> new RuntimeException("Category not found"));
-        post.setCategory(category);
-        return postRepository.save(post);
+    public Optional<Post> findById(Integer postId) {
+        return postRepository.findById(postId);
     }
 
     @Override
-    public Post updatePost(Integer postId, Post post) {
-        // 获取文章并更新内容
-        Post existingPost = getPostById(postId);
-        existingPost.setTitle(post.getTitle());
-        existingPost.setContent(post.getContent());
-        return postRepository.save(existingPost);
+    public void savePost(Post post) {
+         postRepository.save(post);
     }
 
     @Override
@@ -58,12 +47,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Post> getPostsByAuthor(Integer userId) {
-        return postRepository.findByAuthor_UserId(userId);
-    }
-
-    @Override
-    public List<Post> searchPostsByTitle(String title) {
-        return postRepository.findByTitleContaining(title);
+    public List<Post> findAll() {
+        return postRepository.findAll();
     }
 }

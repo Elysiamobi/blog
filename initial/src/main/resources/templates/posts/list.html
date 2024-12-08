@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Post Management</title>
+</head>
+<body>
+<h1>Posts</h1>
+<a href="/posts/new">Add New Post</a>
+<table border="1">
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Title</th>
+    <th>Category</th>
+    <th>Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="post : ${posts}">
+    <td th:text="${post.postId}"></td>
+    <td th:text="${post.title}"></td>
+    <td th:text="${post.categoryId}"></td>
+    <td>
+      <a th:href="@{/posts/view/{id}(id=${post.postId})}">View</a> |
+      <a th:href="@{/posts/edit/{id}(id=${post.postId})}">Edit</a> |
+      <a th:href="@{/posts/delete/{id}(id=${post.postId})}" onclick="return confirm('Delete this post?')">Delete</a>
+    </td>
+  </tr>
+  </tbody>
+</table>
+</body>
+</html>

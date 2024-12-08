@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -15,16 +16,18 @@ public class CategoryServiceImpl implements CategoryService {
     private CategoryRepository categoryRepository;
 
     @Override
-    public Category createCategory(Category category) {
-        return categoryRepository.save(category);
+    public Category findByName(String name) {
+        return categoryRepository.findByName(name);
     }
 
     @Override
-    public Category updateCategory(Integer categoryId, Category category) {
-        Category existingCategory = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new RuntimeException("Category not found"));
-        existingCategory.setName(category.getName());
-        return categoryRepository.save(existingCategory);
+    public Optional<Category> findById(Integer categoryId) {
+        return categoryRepository.findById(categoryId);
+    }
+
+    @Override
+    public void saveCategory(Category category) {
+        categoryRepository.save(category);
     }
 
     @Override
@@ -33,13 +36,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<Category> getAllCategories() {
+    public List<Category> findAll() {
         return categoryRepository.findAll();
-    }
-
-    @Override
-    public Category getCategoryById(Integer categoryId) {
-        return categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new RuntimeException("Category not found"));
     }
 }

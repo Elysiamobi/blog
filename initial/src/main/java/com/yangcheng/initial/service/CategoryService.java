@@ -3,11 +3,13 @@ package com.yangcheng.initial.service;
 import com.yangcheng.initial.entity.Category;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CategoryService {
-    Category createCategory(Category category);
-    Category updateCategory(Integer categoryId, Category category);
+    Category findByName(String name);
+    Optional<Category> findById(Integer categoryId);
+    void saveCategory(Category category);
     void deleteCategory(Integer categoryId);
-    List<Category> getAllCategories();
-    Category getCategoryById(Integer categoryId);
+
+    List<Category> findAll();
 }

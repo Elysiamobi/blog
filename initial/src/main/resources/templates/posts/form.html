@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Post Form</title>
+</head>
+<body>
+<h1 th:text="${post.postId == null ? 'Add New Post' : 'Edit Post'}"></h1>
+<form th:action="@{/posts/save}" th:object="${post}" method="post">
+  <input type="hidden" th:field="*{postId}" />
+  <label>Title:</label>
+  <input type="text" th:field="*{title}" required /><br />
+  <label>Content:</label>
+  <textarea th:field="*{content}" required></textarea><br />
+  <label>Category:</label>
+  <select th:field="*{categoryId}">
+    <option th:each="category : ${categories}" th:value="${category.categoryId}" th:text="${category.name}"></option>
+  </select><br />
+  <button type="submit">Save</button>
+</form>
+<a href="/posts">Back to List</a>
+</body>
+</html>
