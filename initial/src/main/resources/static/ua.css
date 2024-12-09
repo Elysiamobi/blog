@@ -1,0 +1,46 @@
+/* 基本页面布局 */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f7fa;
+    margin: 0;
+    padding: 0;
+}
+
+/* 容器样式 */
+.container {
+    width: 50%;
+    margin: 100px auto;
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* 页面标题样式 */
+h1 {
+    color: #dc3545;
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+/* 提示文本样式 */
+p {
+    color: #555;
+    font-size: 1.2em;
+    margin-bottom: 30px;
+}
+
+/* 链接样式 */
+a {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1.1em;
+}
+
+a:hover {
+    background-color: #0056b3;
+}

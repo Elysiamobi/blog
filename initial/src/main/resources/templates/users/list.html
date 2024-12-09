@@ -2,30 +2,40 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>User Management</title>
+  <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-<h1>Users</h1>
-<a href="/users/new">Add New User</a>
-<table border="1">
-  <thead>
-  <tr>
-    <th>ID</th>
-    <th>Username</th>
-    <th>Email</th>
-    <th>Actions</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr th:each="user : ${users}">
-    <td th:text="${user.userId}"></td>
-    <td th:text="${user.username}"></td>
-    <td th:text="${user.email}"></td>
-    <td>
-      <a th:href="@{/users/edit/{id}(id=${user.userId})}">Edit</a> |
-      <a th:href="@{/users/delete/{id}(id=${user.userId})}" onclick="return confirm('Delete this user?')">Delete</a>
-    </td>
-  </tr>
-  </tbody>
-</table>
+
+<div class="container">
+  <h1>Users</h1>
+  <div class="add-user-btn">
+    <a href="/users/new">Add New User</a>
+  </div>
+
+  <table>
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Username</th>
+      <th>Email</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${users}">
+      <td th:text="${user.userId}"></td>
+      <td th:text="${user.username}"></td>
+      <td th:text="${user.email}"></td>
+      <td>
+        <div class="actions">
+          <a th:href="@{/users/edit/{id}(id=${user.userId})}" class="edit">Edit</a>
+          <a th:href="@{/users/delete/{id}(id=${user.userId})}" class="delete" onclick="return confirm('Delete this user?')">Delete</a>
+        </div>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
 </body>
 </html>

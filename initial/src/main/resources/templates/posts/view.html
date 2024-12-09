@@ -2,8 +2,10 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>Post Details</title>
+  <link rel="stylesheet" href="/view.css">
 </head>
 <body>
+
 <div class="container">
   <h1 th:text="${post.title}">Post Title</h1>
   <p><strong>Category ID:</strong> <span th:text="${post.categoryId}"></span></p>
@@ -13,11 +15,12 @@
     <p th:text="${post.content}">Post Content</p>
   </div>
   <hr>
+
   <h2>Comments</h2>
   <div th:if="${comments.isEmpty()}">
     <p>No comments yet. Be the first to comment!</p>
   </div>
-  <div th:each="comment : ${comments}">
+  <div th:each="comment : ${comments}" class="comment">
     <div>
       <p><strong>User ID:</strong> <span th:text="${comment.userId}"></span></p>
       <p th:text="${comment.content}">Comment Content</p>
@@ -25,6 +28,7 @@
     </div>
     <hr>
   </div>
+
   <form th:action="@{/comments/save}" method="post">
     <input type="hidden" name="postId" th:value="${post.postId}">
     <label for="userId">User ID:</label>
@@ -35,7 +39,9 @@
     <br>
     <button type="submit">Post Comment</button>
   </form>
+
   <a th:href="@{/posts}">Back to Posts</a>
 </div>
+
 </body>
 </html>

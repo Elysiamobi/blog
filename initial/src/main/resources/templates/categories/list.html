@@ -1,29 +1,37 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Category Management</title>
+  <link rel="stylesheet" href="/list.css"> <!-- 引入外部CSS文件 -->
 </head>
 <body>
-<h1>Categories</h1>
-<a href="/categories/new">Add New Category</a>
-<table border="1">
-  <thead>
-  <tr>
-    <th>ID</th>
-    <th>Name</th>
-    <th>Actions</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr th:each="category : ${categories}">
-    <td th:text="${category.categoryId}"></td>
-    <td th:text="${category.name}"></td>
-    <td>
-      <a th:href="@{/categories/edit/{id}(id=${category.categoryId})}">Edit</a> |
-      <a th:href="@{/categories/delete/{id}(id=${category.categoryId})}" onclick="return confirm('Delete this category?')">Delete</a>
-    </td>
-  </tr>
-  </tbody>
-</table>
+
+<div class="container">
+  <h1>Categories</h1>
+  <a href="/categories/new" class="add-button">Add New Category</a>
+
+  <table>
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="category : ${categories}">
+      <td th:text="${category.categoryId}"></td>
+      <td th:text="${category.name}"></td>
+      <td>
+        <a th:href="@{/categories/edit/{id}(id=${category.categoryId})}">Edit</a> |
+        <a th:href="@{/categories/delete/{id}(id=${category.categoryId})}" onclick="return confirm('Delete this category?')">Delete</a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
 </body>
 </html>
