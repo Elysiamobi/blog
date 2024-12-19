@@ -61,22 +61,20 @@
 <body>
 <div class="container">
     <div class="header">
-        <h1>Welcome to the Blog</h1>
-        <p>Your go-to platform for sharing and exploring ideas</p>
+        <h1>欢迎来到我的博客</h1>
+        <p>分享和探索想法的首选平台</p>
     </div>
 
     <nav class="nav">
-        <a th:href="@{/posts}">All Posts</a>
-        <a th:href="@{/users}">User Management</a>
-        <a th:href="@{/categories}">Categories</a>
-        <a th:href="@{/posts/new}">Create Post</a>
+        <a th:href="@{/posts}">所有文章</a>
+        <a th:href="@{/users}">用户列表</a>
+        <a th:href="@{/categories}">分类</a>
+        <a th:href="@{/posts/new}">发布文章</a>
+        <a th:href="@{/login}">登录</a>
     </nav>
 
     <div class="posts">
-        <h2>Published Posts</h2>
-<!--        <div th:if="${posts.isEmpty()}">-->
-<!--            <p>No posts available. <a th:href="@{/posts/new}">Create a new post</a>.</p>-->
-<!--        </div>-->
+        <h2>已发布文章</h2>
         <div>
             <p th:if="${loggedInUser != null}">
                 Logged in as: <strong th:text="${loggedInUser.username}"></strong> |
@@ -85,13 +83,17 @@
         </div>
         <div class="post" th:each="post : ${posts}">
             <h3 th:text="${post.title}"></h3>
-            <p th:text="${#strings.substring(post.content, 0, 100) + '...'}"></p>
             <p><strong>Category:</strong> <span th:text="${post.categoryName}"></span></p>
-            <p><strong>Author:</strong> <span th:text="${post.authorName}"></span></p>
-            <p><strong>Published:</strong> <span th:text="${post.createdAt}"></span></p>
+<!--            <p><strong>Author:</strong> <span th:text="${post.authorName}"></span></p>-->
+<!--            <p><strong>Published:</strong> <span th:text="${post.createdAt}"></span></p>-->
+            <p><strong>Category:</strong> <span th:text="${post.categoryName != null ? post.categoryName : 'Unknown'}"></span></p>
+            <p><strong>Author:</strong> <span th:text="${post.authorName != null ? post.authorName : 'Unknown'}"></span></p>
             <div class="actions">
                 <a th:href="@{/posts/view/{id}(id=${post.postId})}">Read More</a>
             </div>
+        </div>
+        <div th:if="${posts == null}">
+            <p>No posts available.</p>
         </div>
     </div>
 </div>

@@ -1,7 +1,9 @@
 package com.yangcheng.initial.Controller;
 
 import com.yangcheng.initial.entity.Category;
+import com.yangcheng.initial.entity.User;
 import com.yangcheng.initial.service.CategoryService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,13 +25,21 @@ public class CategoryController {
     }
 
     @GetMapping("/new")
-    public String showAddCategoryForm(Model model) {
+    public String showAddCategoryForm(HttpSession session, Model model) {
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+        if (loggedInUser == null || !loggedInUser.isAdmin()) {
+            return "error/unauthorized"; // 如果用户不是管理员，返回未授权页面
+        }
         model.addAttribute("category", new Category()); // Pass a new Category object
         return "categories/form"; // Render form.html
     }
 
     @GetMapping("/edit/{id}")
-    public String showEditCategoryForm(@PathVariable Integer id, Model model) {
+    public String showEditCategoryForm(@PathVariable Integer id,HttpSession session, Model model) {
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+        if (loggedInUser == null || !loggedInUser.isAdmin()) {
+            return "error/unauthorized"; // 如果用户不是管理员，返回未授权页面
+        }
         Optional<Category> category = categoryService.findById(id);
         if (category.isPresent()) {
             model.addAttribute("category", category.get());
@@ -40,13 +50,21 @@ public class CategoryController {
     }
 
     @PostMapping("/save")
-    public String saveCategory(@ModelAttribute Category category) {
+    public String saveCategory(@ModelAttribute Category category,HttpSession session) {
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+        if (loggedInUser == null || !loggedInUser.isAdmin()) {
+            return "error/unauthorized"; // 如果用户不是管理员，返回未授权页面
+        }
         categoryService.saveCategory(category);
         return "redirect:/categories"; // Redirect to categories list after saving
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteCategory(@PathVariable Integer id) {
+    public String deleteCategory(@PathVariable Integer id,HttpSession session) {
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+        if (loggedInUser == null || !loggedInUser.isAdmin()) {
+            return "error/unauthorized"; // 如果用户不是管理员，返回未授权页面
+        }
         categoryService.deleteCategory(id);
         return "redirect:/categories"; // Redirect to categories list after deletion
     }

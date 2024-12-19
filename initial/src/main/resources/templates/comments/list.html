@@ -9,20 +9,20 @@
 <body>
 
 <div class="container">
-  <h1>Comments</h1>
+  <h1>评论</h1>
 
   <a th:href="@{/comments/new}" class="button">Add New Comment</a>
 
   <form th:action="@{/comments/search}" method="get">
     <label for="postId">Search by Post ID:</label>
     <input type="number" name="postId" id="postId">
-    <button type="submit">Search</button>
+    <button type="submit">搜索</button>
   </form>
 
   <form th:action="@{/comments/search}" method="get">
     <label for="userId">Search by User ID:</label>
     <input type="number" name="userId" id="userId">
-    <button type="submit">Search</button>
+    <button type="submit">搜索</button>
   </form>
 
   <table>

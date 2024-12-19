@@ -41,4 +41,6 @@ public class User {
     public boolean isUser() {
         return this.roleId != null && this.roleId == 1;
     }
+
+
 }

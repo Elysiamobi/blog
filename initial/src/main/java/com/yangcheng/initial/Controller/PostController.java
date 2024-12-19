@@ -6,6 +6,7 @@ import com.yangcheng.initial.entity.User;
 import com.yangcheng.initial.service.CategoryService;
 import com.yangcheng.initial.service.PostService;
 import com.yangcheng.initial.service.CommentService;
+import com.yangcheng.initial.service.UserService;
 import com.yangcheng.initial.utils.AuthorizationUtil;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,9 @@ public class PostController {
     @Autowired
     private CommentService commentService;
 
+    @Autowired
+    private UserService userService;
+
     @GetMapping
     public String listPosts(Model model) {
         model.addAttribute("posts", postService.findAll());
@@ -43,6 +47,10 @@ public class PostController {
 
         // Add posts to the model
         model.addAttribute("posts", posts);
+//        for(Post post: posts){
+//            post.setAuthorName(userService.findById(post.getAuthorId()).orElse(new User()).getUsername());
+//            post.setCategoryName(categoryService.findById(post.getCategoryId()).orElseThrow(()->new RuntimeException("category Not found")).getName());
+//        }
         return "index"; // Render the index.html template
     }
     @GetMapping("/new")
@@ -64,6 +72,7 @@ public class PostController {
 
         if (post.isPresent() && AuthorizationUtil.canModify(loggedInUser, post.get().getAuthorId())) {
             model.addAttribute("post", post.get());
+
             return "posts/form";
         } else {
             return "error/unauthorized"; // Render an unauthorized error page
@@ -77,6 +86,7 @@ public class PostController {
             return "redirect:/login"; // Redirect to login if not authenticated
         }
         post.setAuthorId(loggedInUser.getUserId());
+
         postService.savePost(post);
         return "redirect:/posts"; // Redirect to posts list after saving
     }
@@ -94,13 +104,18 @@ public class PostController {
     }
 
     @GetMapping("/view/{id}")
-    public String viewPost(@PathVariable Integer id, Model model) {
+    public String viewPost(@PathVariable Integer id, HttpSession session,Model model) {
         Optional<Post> post = postService.findById(id);
         if (post.isPresent()) {
             model.addAttribute("post", post.get());
+
+            User loggedInUser = (User) session.getAttribute("loggedInUser");
+            Integer userId = loggedInUser != null ? loggedInUser.getUserId() : null;
+
             // Fetch comments for the post
             List<Comment> comments = commentService.findByPostId(id);
             model.addAttribute("comments", comments);
+            model.addAttribute("userId", userId);
             return "posts/view"; // Render posts/view.html
         } else {
             model.addAttribute("error", "Post not found.");

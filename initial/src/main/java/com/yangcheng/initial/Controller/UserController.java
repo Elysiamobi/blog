@@ -58,8 +58,14 @@ public class UserController {
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteUser(@PathVariable Integer id) {
-        userService.deleteUser(id);
-        return "redirect:/users"; // Redirect to users list after deletion
+    public String deleteUser(@PathVariable Integer id,HttpSession session) {
+        User loggedInUser=(User)session.getAttribute("loggedInUser");
+        if(loggedInUser!=null&&loggedInUser.isAdmin()){
+            userService.deleteUser(id);
+            return "redirect:/users"; // Redirect to users list after deletion
+        }else{
+            return "error/unauthorized";
+        }
+
     }
 }

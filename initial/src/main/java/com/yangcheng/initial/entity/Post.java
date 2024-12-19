@@ -33,6 +33,16 @@ public class Post {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    // Eagerly load the associated Author (User) entity
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "author_id", insertable = false, updatable = false)
+    private User author;
+
+    // Eagerly load the associated Category entity
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "category_id", insertable = false, updatable = false)
+    private Category category;
+
     @Transient
     private String categoryName; // Category name for display
 
@@ -40,20 +50,22 @@ public class Post {
     private String authorName; // Author name for display
 
     // Getter and Setter for categoryName
+    // Getter for categoryName (based on the loaded category)
     public String getCategoryName() {
-        return categoryName;
+        return category != null ? category.getName() : null;
     }
 
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
-    }
-
-    // Getter and Setter for authorName
+    // Getter for authorName (based on the loaded author)
     public String getAuthorName() {
-        return authorName;
+        return author != null ? author.getUsername() : null;
     }
 
-    public void setAuthorName(String authorName) {
-        this.authorName = authorName;
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
     }
 }

@@ -6,7 +6,6 @@ import com.yangcheng.initial.service.CommentService;
 import com.yangcheng.initial.utils.AuthorizationUtil;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +34,18 @@ public class CommentController {
     }
 
     @PostMapping("/save")
-    public String saveComment(@ModelAttribute Comment comment) {
+    public String saveComment(@ModelAttribute Comment comment, HttpSession session) {
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+
+        if (loggedInUser == null) {
+            // 用户未登录，重定向到登录页面
+            return "redirect:/login";
+        }
+
+        // 设置评论的作者ID为当前登录用户的ID
+        comment.setUserId(loggedInUser.getUserId());
+
+        // 保存评论
         commentService.saveComment(comment);
         return "redirect:/comments";
     }

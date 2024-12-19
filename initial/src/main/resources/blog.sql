@@ -1,6 +1,6 @@
 -- 创建数据库
-CREATE DATABASE yc_blog;
-USE yc_blog;
+CREATE DATABASE yc1_blog;
+USE yc1_blog;
 
 -- 1. 用户表: 存储用户信息
 CREATE TABLE users (
@@ -62,10 +62,9 @@ category_id INT AUTO_INCREMENT PRIMARY KEY,  -- 分类ID
 INSERT INTO categories (name) VALUES ('Technology'), ('Lifestyle'), ('Education'), ('Travel');
 
 -- 插入初始文章数据（示例）
-INSERT INTO posts (title, content, author_id, category_id)
-VALUES ('Sample Post 1', 'This is a sample content.', 1, 1);
+
 
 -- 插入用户和角色数据
-INSERT INTO roles (role_name) VALUES ('USER'), ('ADMIN');
+INSERT INTO roles (role_name, role_id) VALUES ('USER',1), ('ADMIN',2);
 INSERT INTO users (username, password, role_id)
-VALUES ('yc', '123', 1);
+VALUES ('admin', 'admin', 2);

@@ -50,4 +50,9 @@ public class PostServiceImpl implements PostService {
     public List<Post> findAll() {
         return postRepository.findAll();
     }
+
+    @Override
+    public List<Object[]> findAllWithCategoryAndAuthor(){
+        return postRepository.findAllWithCategoryAndAuthor();
+    };
 }

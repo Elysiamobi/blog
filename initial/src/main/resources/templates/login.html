@@ -8,19 +8,19 @@
 </head>
 <body>
 <div class="login-container">
-  <h2>Login</h2>
+  <h2>登录</h2>
   <form th:action="@{/login}" method="post">
-    <label for="username">Username</label>
-    <input type="text" id="username" name="username" placeholder="Enter your username" required>
+    <label for="username">用户名</label>
+    <input type="text" id="username" name="username" placeholder="输入用户名" required>
 
-    <label for="password">Password</label>
-    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+    <label for="password">密码</label>
+    <input type="password" id="password" name="password" placeholder="输入密码" required>
 
-    <button type="submit">Login</button>
+    <button type="submit">登录</button>
   </form>
 
   <div class="link-container">
-    <a th:href="@{/register}">Don't have an account? Register here</a>
+    <a th:href="@{/register}">没有账号？点击注册</a>
   </div>
 
   <!-- Success or Error Messages -->

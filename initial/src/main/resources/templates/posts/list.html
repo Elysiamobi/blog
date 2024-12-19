@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Post Management</title>
+  <title>文章管理</title>
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
 
 <div class="container">
-  <h1>Posts</h1>
+  <h1>文章</h1>
 
   <div class="add-post-btn">
-    <a href="/posts/new">Add New Post</a>
+    <a href="/posts/new">添加新文章</a>
   </div>
 
   <table>
@@ -29,9 +29,9 @@
       <td th:text="${post.categoryId}"></td>
       <td>
         <div class="actions">
-          <a th:href="@{/posts/view/{id}(id=${post.postId})}" class="view">View</a> |
-          <a th:href="@{/posts/edit/{id}(id=${post.postId})}" class="edit">Edit</a> |
-          <a th:href="@{/posts/delete/{id}(id=${post.postId})}" class="delete" onclick="return confirm('Delete this post?')">Delete</a>
+          <a th:href="@{/posts/view/{id}(id=${post.postId})}" class="view">查看</a> |
+          <a th:href="@{/posts/edit/{id}(id=${post.postId})}" class="edit">编辑</a> |
+          <a th:href="@{/posts/delete/{id}(id=${post.postId})}" class="delete" onclick="return confirm('确认删除这篇文章?')">删除</a>
         </div>
       </td>
     </tr>

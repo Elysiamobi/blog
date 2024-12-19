@@ -11,7 +11,6 @@ public interface PostService {
     Optional<Post> findById(Integer postId);
     void savePost(Post post);
     void deletePost(Integer postId);
-
     List<Post> findAll();
-
+    List<Object[]> findAllWithCategoryAndAuthor();
 }
