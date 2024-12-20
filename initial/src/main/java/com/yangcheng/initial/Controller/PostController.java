@@ -47,10 +47,7 @@ public class PostController {
 
         // Add posts to the model
         model.addAttribute("posts", posts);
-//        for(Post post: posts){
-//            post.setAuthorName(userService.findById(post.getAuthorId()).orElse(new User()).getUsername());
-//            post.setCategoryName(categoryService.findById(post.getCategoryId()).orElseThrow(()->new RuntimeException("category Not found")).getName());
-//        }
+
         return "index"; // Render the index.html template
     }
     @GetMapping("/new")

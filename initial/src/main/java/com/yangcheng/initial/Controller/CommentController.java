@@ -51,26 +51,39 @@ public class CommentController {
     }
 
     @GetMapping("/edit/{id}")
-    public String showEditCommentForm(@PathVariable Integer id, Model model) {
+    public String showEditCommentForm(@PathVariable Integer id, Model model, HttpSession session) {
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
         Optional<Comment> comment = commentService.findById(id);
+
         if (comment.isPresent()) {
-            model.addAttribute("comment", comment.get());
-            return "comments/form";
+            // 只有管理员或评论的作者才可以编辑
+            if (AuthorizationUtil.canModify(loggedInUser, comment.get().getUserId())) {
+                model.addAttribute("comment", comment.get());
+                return "comments/form";  // 如果是管理员或评论的作者，可以编辑评论
+            } else {
+                return "error/unauthorized";  // 如果没有权限，返回未授权页面
+            }
         } else {
-            return "redirect:/comments";
+            return "redirect:/comments";  // 如果评论不存在，重定向到评论列表页面
         }
     }
+
 
     @GetMapping("/delete/{id}")
     public String deleteComment(@PathVariable Integer id, HttpSession session) {
         User loggedInUser = (User) session.getAttribute("loggedInUser");
         Optional<Comment> comment = commentService.findById(id);
 
-        if (comment.isPresent() && AuthorizationUtil.canModify(loggedInUser, comment.get().getUserId())) {
-            commentService.deleteComment(id);
-            return "redirect:/comments";
+        if (comment.isPresent()) {
+            // 使用 AuthorizationUtil 检查权限，确保只有管理员或评论的作者可以删除评论
+            if (AuthorizationUtil.canModify(loggedInUser, comment.get().getUserId())) {
+                commentService.deleteComment(id);  // 删除评论
+                return "redirect:/comments";  // 删除后重定向到评论列表页面
+            } else {
+                return "error/unauthorized";  // 如果没有权限，返回未授权页面
+            }
         } else {
-            return "error/unauthorized"; // Render an unauthorized error page
+            return "redirect:/comments";  // 如果评论不存在，重定向到评论列表页面
         }
     }
 

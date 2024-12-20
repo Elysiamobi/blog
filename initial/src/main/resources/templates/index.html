@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blog Homepage</title>
-<!--    <link rel="stylesheet" href="/login.css">-->
     <style>
         .container {
             width: 80%;
@@ -56,6 +55,89 @@
         .post .actions a:hover {
             text-decoration: underline;
         }
+        .info-section {
+            background-color: #f9f9f9;
+            padding: 20px;
+            margin-top: 30px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .info-section h2 {
+            margin-top: 0;
+        }
+        .info-section ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .info-section ul li {
+            margin: 10px 0;
+        }
+        .subscribe-section {
+            background-color: #f9f9f9;
+            padding: 20px;
+            margin-top: 30px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .subscribe-section h2 {
+            margin-top: 0;
+        }
+        .subscribe-form {
+            display: flex;
+            justify-content: space-between;
+        }
+        .subscribe-form input[type="email"] {
+            padding: 10px;
+            width: 70%;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .subscribe-form button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .subscribe-form button:hover {
+            background-color: #0056b3;
+        }
+        .popular-posts {
+            background-color: #ffffff;
+            padding: 20px;
+            margin-top: 30px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .popular-posts h2 {
+            margin-top: 0;
+        }
+        .popular-posts ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .popular-posts ul li {
+            margin: 10px 0;
+        }
+        a{
+            text-decoration: none;
+        }
+        /* 导航栏中的链接悬停效果 */
+
+        /* 链接在文章区域中的样式 */
+        .posts a {
+            color: black; /* 文章中链接的字体颜色 */
+            font-weight: normal; /* 设置正常的字体粗细 */
+            text-decoration: none; /* 去除文章中链接的下划线 */
+        }
+
+        .posts a:hover {
+            text-decoration: underline; /* 悬停时显示下划线 */
+            color: #0056b3; /* 悬停时的字体颜色 */
+        }
+
+
     </style>
 </head>
 <body>
@@ -74,28 +156,62 @@
     </nav>
 
     <div class="posts">
-        <h2>已发布文章</h2>
+        <!-- 用户登录信息 -->
         <div>
             <p th:if="${loggedInUser != null}">
                 Logged in as: <strong th:text="${loggedInUser.username}"></strong> |
                 <a th:href="@{/logout}">Logout</a>
             </p>
         </div>
-        <div class="post" th:each="post : ${posts}">
+
+        <!-- 文章内容 -->
+        <!-- 你可以在这里用Thymeleaf的语法插入文章内容 -->
+        <!-- <div class="post" th:each="post : ${posts}">
             <h3 th:text="${post.title}"></h3>
             <p><strong>Category:</strong> <span th:text="${post.categoryName}"></span></p>
-<!--            <p><strong>Author:</strong> <span th:text="${post.authorName}"></span></p>-->
-<!--            <p><strong>Published:</strong> <span th:text="${post.createdAt}"></span></p>-->
-            <p><strong>Category:</strong> <span th:text="${post.categoryName != null ? post.categoryName : 'Unknown'}"></span></p>
-            <p><strong>Author:</strong> <span th:text="${post.authorName != null ? post.authorName : 'Unknown'}"></span></p>
+            <p><strong>Author:</strong> <span th:text="${post.authorName}"></span></p>
+            <p><strong>Published:</strong> <span th:text="${post.createdAt}"></span></p>
             <div class="actions">
                 <a th:href="@{/posts/view/{id}(id=${post.postId})}">Read More</a>
             </div>
-        </div>
-        <div th:if="${posts == null}">
+        </div> -->
+        <!-- <div th:if="${#lists.isEmpty(posts)}">
             <p>No posts available.</p>
-        </div>
+        </div> -->
     </div>
+
+    <!-- 相关信息板块 -->
+    <div class="info-section">
+        <h2>相关信息</h2>
+        <ul>
+            <li><strong>关于我们:</strong> 我们的博客致力于提供一个开放的空间来分享思想、知识和观点。</li>
+            <li><strong>联系方式:</strong> 如果您有任何问题，欢迎通过电子邮件与我们联系：<a href="mailto:bh3481640032@gmail.com">bh3481640032@gmail.com</a></li>
+            <li><strong>最新动态:</strong> 本博客平台将在下个月推出全新的功能，敬请期待！</li>
+            <li><strong>社交媒体:</strong> 我们的博客也在社交媒体上活跃，欢迎关注我们的官方账号：<a href="https://elysiamobi.github.io">主页</a> | <a href="https://www.github.com/elysiamobi">github</a></li>
+        </ul>
+    </div>
+
+    <!-- 订阅板块 -->
+<!--    <div class="subscribe-section">-->
+<!--        <h2>订阅博客</h2>-->
+<!--        <p>输入您的电子邮件地址，以便接收最新的博客更新：</p>-->
+<!--        <div class="subscribe-form">-->
+<!--            <input type="email" placeholder="输入您的电子邮件">-->
+<!--            <button type="button">订阅</button>-->
+<!--        </div>-->
+<!--    </div>-->
+
+    <!-- 热门文章板块 -->
+    <div class="popular-posts">
+        <h2>热门文章</h2>
+        <ul>
+            <li><a href="http://localhost:8080/posts/view/1">first</a></li>
+            <li><a href="http://localhost:8080/posts/view/2">444</a></li>
+            <li><a href="http://localhost:8080/posts/view/3">抬头</a></li>
+            <li><a href="http://localhost:8080/posts/view/4">333</a></li>
+        </ul>
+    </div>
+
 </div>
 </body>
 </html>
